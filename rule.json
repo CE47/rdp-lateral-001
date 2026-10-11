@@ -1,0 +1,28 @@
+{
+  "name": "One internal account logging on to several internal servers in quick succession",
+  "description": "Lab rule for the CTIA rdp-lateral-001 scenario. A single internal account completed successful interactive logons on several different internal servers inside a few minutes, which is what compromised-credential lateral movement looks like on Windows. The query is deliberately the same one the investigation runs, so the number of alerts the rule raises and the number of documents the analyst finds by hand are the same number. No threshold is set on purpose, so each logon in the chain arrives as its own alert and the analyst can see the hop sequence on the Alerts page. The time window is deliberately long because this lab ships historical data - that is a lab-only concession, not a production setting; a real deployment would use a short window with a cardinality rule, because one account reaching N hosts in T minutes is the signal and any single logon is not.",
+  "type": "query",
+  "risk_score": 73,
+  "severity": "high",
+  "tags": [
+    "ctia-lab",
+    "rdp",
+    "windows",
+    "credential-access",
+    "lateral-movement",
+    "detection-engineering"
+  ],
+  "enabled": true,
+  "interval": "1m",
+  "from": "now-365d",
+  "to": "now",
+  "index": [
+    "auth-*"
+  ],
+  "timeField": "@timestamp",
+  "query": "event.code: 4624 and event.outcome: \"success\" and user.name: \"rneuman\"",
+  "language": "kuery",
+  "max_signals": 100,
+  "actions": [],
+  "notify_when": "onActiveAlert"
+}
